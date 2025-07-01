@@ -1,3 +1,5 @@
+JWTnREDIS 서버랑 연동해서 로그인 테스트
+
 ## 설명
 Graphql 설치
 Tailwind css 설치
