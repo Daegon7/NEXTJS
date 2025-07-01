@@ -76,6 +76,12 @@ export default function Home() {
   }
 
   const fetchItems = async () => {
+
+    if (!isLoggedIn) {
+      alert('로그인이 필요합니다 😅');
+      return;
+    }
+
     try {
       const res = await fetch('/api/graphql2', {
         method: 'POST',
