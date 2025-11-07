@@ -4,6 +4,7 @@ import axios from 'axios'
 type Item = {
   id: string
   name: string
+  email: String
   description: string
 }
 
@@ -83,7 +84,7 @@ export default function Home() {
     }
 
     try {
-      const res = await fetch('/api/graphql2', {
+      const res = await fetch('http://localhost:8081/user/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,13 +92,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           query: `
-            query {
-              items {
-                id
-                name
-                description
-              }
-            }
+            query { users { id name email description } }
           `
         }),
       })
@@ -107,7 +102,7 @@ export default function Home() {
         setError(JSON.stringify(json.errors, null, 2))
         setItems([])
       } else {
-        setItems(json.data.items)
+        setItems(json)
         setError('')
       }
     } catch (err) {
@@ -159,6 +154,7 @@ export default function Home() {
           className="hover:bg-slate-100 transition p-2 border-b border-slate-200"
         >
           <strong className="text-blue-700">{item.name}</strong>
+          <p className="text-gray-600 text-sm">{item.email}</p>
           <p className="text-gray-600 text-sm">{item.description}</p>
         </li>
       ))}
