@@ -1,4 +1,5 @@
 #Debugging Setting
+- Chrome 설치
 - Vs code 좌측 디버깅 메뉴 클릭 후 javascript debug Terminal 옆에 Create launch.json 클릭
 {
     "version": "0.2.0",
