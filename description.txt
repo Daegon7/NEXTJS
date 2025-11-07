@@ -1,0 +1,14 @@
+#Debugging Setting
+- Vs code 좌측 디버깅 메뉴 클릭 후 javascript debug Terminal 옆에 Create launch.json 클릭
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/src"
+        }
+    ]
+}
