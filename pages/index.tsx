@@ -83,7 +83,7 @@ export default function Home() {
   }
 
   try {
-    const res = await fetch('http://localhost:8081/user/graphql', {
+    const res = await fetch('http://localhost:8081/graphql/proxy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
