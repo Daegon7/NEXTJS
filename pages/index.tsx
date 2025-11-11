@@ -4,7 +4,7 @@ import axios from 'axios'
 type Item = {
   id: string
   name: string
-  email: String
+  email: string
   description: string
 }
 
@@ -77,43 +77,59 @@ export default function Home() {
   }
 
   const fetchItems = async () => {
+  if (!isLoggedIn) {
+    alert('로그인이 필요합니다 😅');
+    return;
+  }
 
-    if (!isLoggedIn) {
-      alert('로그인이 필요합니다 😅');
-      return;
-    }
+  try {
+    const res = await fetch('http://localhost:8081/user/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`
+      },
+      body: JSON.stringify({
+      query: `
+        query {
+          users(where: {
+            id: "test1",
+            name: "test2",
+            email: "test3",
+            description: "description4"
+          }) {
+            id
+            name
+            email
+            description
+          }
+        }
+      `
+      }),
+    })
 
-    try {
-      const res = await fetch('http://localhost:8081/user/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`
-        },
-        body: JSON.stringify({
-          query: `
-            query { users { id name email description } }
-          `
-        }),
-      })
+    const json = await res.json()
+    console.log('GraphQL 응답:', json)  // ✅ 응답 구조 확인용 로그
 
-      const json = await res.json()
-      if (json.errors) {
-        setError(JSON.stringify(json.errors, null, 2))
-        setItems([])
-      } else {
-        setItems(json)
-        setError('')
-      }
-    } catch (err) {
-      setError('요청 실패: ' + err)
+    if (json.errors) {
+      setError(JSON.stringify(json.errors, null, 2))
+      setItems([])
+    } else if (json.data?.users) {
+      setItems(json.data.users)   // ✅ 안전하게 접근
+      setError('')
+    } else {
+      setError('응답에 users 데이터가 없습니다.')
       setItems([])
     }
+  } catch (err: any) {
+    setError('요청 실패: ' + err.message)
+    setItems([])
   }
+}
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-gradient-to-br from-violet-200 via-purple-100 to-white p-6 space-y-6">
-  <h1 className="text-4xl font-bold text-blue-700 drop-shadow-lg">GraphQL 인증 예제</h1>
+  <h1 className="text-4xl font-bold text-blue-700 drop-shadow-lg">GraphQL 인증</h1>
 
   <div className="flex space-x-4">
     {isLoggedIn ? (
